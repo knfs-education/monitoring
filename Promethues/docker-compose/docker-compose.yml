@@ -1,0 +1,47 @@
+version: "3.8"
+services:
+  nodejs-app:
+    build:
+      context: ./app
+    container_name: nodejs-app
+    ports:
+      - "3000:3000"
+    networks:
+      - promethus-monitoring-dc
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - "8090:8080" # thực tế không export ra ngoài ví dụ để trực quan hoá
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - promethus-monitoring-dc
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090" # thực tế không export ra ngoài ví dụ để trực quan hoá
+    networks:
+      - promethus-monitoring-dc
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3002:3000"
+    # volumes:
+      # - ./grafana/provisioning:/etc/grafana/provisioning # Dùng nếu đã có thể config sẵn các file provisioning - datasoruce
+    networks:
+      - promethus-monitoring-dc
+
+networks:
+  promethus-monitoring-dc:
+    driver: bridge
