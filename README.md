@@ -1,12 +1,48 @@
 # Monitoring?
 
-## 1 Mục tiêu của monitoring
+### 1 Mục tiêu của monitoring
 
 - Hiểu hệ thống: Xem cách ứng dụng hoạt động, hiệu suất, và khả năng đáp ứng.
 - Phát hiện sự cố: Cảnh báo sớm khi xảy ra lỗi hoặc hiệu suất không đạt yêu cầu.
 - Phân tích nguyên nhân gốc rễ: Giúp tìm hiểu tại sao một sự cố xảy ra.
+  
+#### 1.1 Metrics
+**Khái niệm**
+Trong monitoring các số liệu đo lương được gọi là metrics.
+Metrics là các chỉ số định lượng phản ánh trạng thái hoặc hiệu suất của một hệ thống. Chúng cung cấp dữ liệu dạng số, có thể thu thập, lưu trữ và phân tích để giám sát và cải thiện hoạt động của hệ thống.
 
-### 2 Phân tích chi tiết các chỉ số cần log và ý nghĩa thực tế
+**Các đặc điểm của Metrics**
+- Định lượng: Metrics luôn ở dạng số, dễ phân tích và biểu diễn dưới dạng đồ thị.
+- Thời gian thực: Metrics thường được thu thập và cập nhật liên tục theo thời gian.
+- Có thể tổng hợp: Metrics có thể được tính toán lại hoặc nhóm lại để hiểu sâu hơn về dữ liệu.
+  
+**Phân loại**
+**a. Latency (Độ trễ):**
+- Ý nghĩa: Thời gian cần để hoàn thành một tác vụ, ví dụ, thời gian xử lý một yêu cầu HTTP.
+- Các chỉ số phổ biến:
+  - Average latency (trung bình): Tính trung bình thời gian xử lý.
+  - Percentiles (P95, P99): Đo lường mức độ trải nghiệm của người dùng trong các trường hợp tốt nhất và tệ nhất.
+  
+**b. Traffic (Lưu lượng):**
+- Ý nghĩa: Lượng yêu cầu hoặc dữ liệu mà hệ thống xử lý trong một đơn vị thời gian.
+- Các chỉ số phổ biến:
+  - Requests per second (RPS): Số lượng yêu cầu mỗi giây.
+  - Bytes per second: Lượng dữ liệu truyền tải qua hệ thống.
+
+**c. Errors (Lỗi):**
+- Ý nghĩa: Số lượng hoặc tỉ lệ lỗi xảy ra trong hệ thống.
+- Các chỉ số phổ biến:
+  - Error rate: Tỉ lệ lỗi trên tổng số yêu cầu, thường biểu diễn dưới dạng phần trăm.
+  - Counts: Số lượng lỗi cụ thể (5xx, 4xx,...).
+
+**d. Saturation (Độ bão hòa):**
+- Ý nghĩa: Mức độ tài nguyên hệ thống bị sử dụng, phản ánh khả năng đáp ứng của hệ thống.
+-  Các chỉ số phổ biến:
+   - CPU usage (%): Mức sử dụng CPU.
+   -  Memory usage: Lượng bộ nhớ được sử dụng.
+   -  Disk I/O: Hoạt động đọc/ghi trên đĩa.
+
+### 2 Phân tích chi tiết các chỉ số (Metrics) cần thu thập và ý nghĩa thực tế
 
 #### 2.1 Tổng số yêu cầu (Request Count)
 
@@ -18,7 +54,7 @@
      - Giảm bất thường -> Ứng dụng hoặc mạng có thể gặp sự cố.  
    - Hiểu mức độ sử dụng để lên kế hoạch mở rộng tài nguyên.  
 **Thực tế:**  
-   - Log theo các nhãn (label):  
+   - thu thập theo các nhãn (label):  
      - **`method`**: Phân biệt giữa `GET`, `POST`,...  
      - **`status`**: Theo dõi trạng thái HTTP (200: thành công, 404: không tìm thấy, 500: lỗi server,...).  
    - Phân tích thời gian thực hoặc theo từng phút.  
@@ -123,9 +159,9 @@ Tính tỷ lệ sử dụng CPU trung bình theo instance.
 
 ### 3 Lời khuyên thực tế khi triển khai monitoring
 
-**Log bao nhiêu là đủ?**  
+**Thu thập bao nhiêu là đủ?**  
    - Tập trung vào các chỉ số quan trọng nhất: Request Count, Response Time, Error Rate.  
-   - Với tài nguyên hệ thống, chỉ log nếu bạn không có các công cụ khác như CloudWatch hoặc Datadog.  
+   - Với tài nguyên hệ thống, chỉ thu thập nếu bạn không có các công cụ khác như CloudWatch hoặc Datadog.  
 
 **Khi nào cảnh báo?**  
    - Cảnh báo cần dựa trên ngưỡng thực tế của hệ thống:  
@@ -134,6 +170,6 @@ Tính tỷ lệ sử dụng CPU trung bình theo instance.
      - CPU hoặc RAM vượt 80-90%.  
 
 **Khi cảnh báo, nên rà soát gì?**  
-   - **Tổng quan:** Kiểm tra logs Prometheus để xem chỉ số nào bất thường.  
+   - **Tổng quan:** Kiểm tra thu thập Prometheus để xem chỉ số nào bất thường.  
    - **Chi tiết:** Dùng tracing (ví dụ: Jaeger) để theo dõi từng request cụ thể.  
    - **Tài nguyên:** Dùng công cụ như `top`, `htop`, hoặc dashboard Grafana để kiểm tra CPU/RAM.  
