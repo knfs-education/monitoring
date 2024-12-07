@@ -40,6 +40,7 @@
        rate(container_network_receive_bytes_total[1m])
        ```
 **Lý do chọn các câu Query(PromQL) trên**
+
 a. Thời gian thu thập (Time Window)
 - **`1m` (1 phút)** được sử dụng trong các biểu thức `rate()` vì đây là khoảng thời gian phổ biến để tính toán **tốc độ thay đổi** trong một đơn vị thời gian, nhằm giảm thiểu các biến động nhỏ và lấy được xu hướng chính. (như đơn vị mốc)
 
