@@ -17,6 +17,7 @@ Metrics là các chỉ số định lượng phản ánh trạng thái hoặc hi
 - Có thể tổng hợp: Metrics có thể được tính toán lại hoặc nhóm lại để hiểu sâu hơn về dữ liệu.
   
 **Phân loại**
+
 **a. Latency (Độ trễ):**
 - Ý nghĩa: Thời gian cần để hoàn thành một tác vụ, ví dụ, thời gian xử lý một yêu cầu HTTP.
 - Các chỉ số phổ biến:
